@@ -1,5 +1,4 @@
-﻿using System.Net.NetworkInformation;
-using System.Text.Json;
+﻿using System.Text.Json;
 
 namespace Blayms.PNGS.Test
 {
@@ -108,7 +107,7 @@ namespace Blayms.PNGS.Test
             WriteColored("\n[TEST] Testing sequence operations...", ConsoleColor.White);
 
             var pngFile = new PngSequenceFile();
-            var testSequence = new PngSequenceFile.Sequence();
+            var testSequence = new PngSequenceFile.SequenceElement();
 
             Console.WriteLine("- Testing AddSequence...");
             pngFile.AddSequence(testSequence);
@@ -129,10 +128,10 @@ namespace Blayms.PNGS.Test
         {
             WriteColored("\n[TEST] Testing ConstructFromSequences...", ConsoleColor.White);
 
-            var sequences = new PngSequenceFile.Sequence[]
+            var sequences = new PngSequenceFile.SequenceElement[]
             {
-                new PngSequenceFile.Sequence { Length = 100 },
-                new PngSequenceFile.Sequence { Length = 200 }
+                new PngSequenceFile.SequenceElement { Length = 100 },
+                new PngSequenceFile.SequenceElement { Length = 200 }
             };
 
             Console.WriteLine("- Testing with preferMaximizedValues = true");
@@ -204,8 +203,8 @@ namespace Blayms.PNGS.Test
 
             var pngFile = new PngSequenceFile();
             pngFile.AddRangeOfSequences(
-                new PngSequenceFile.Sequence { Length = 100 },
-                new PngSequenceFile.Sequence { Length = 200 });
+                new PngSequenceFile.SequenceElement { Length = 100 },
+                new PngSequenceFile.SequenceElement { Length = 200 });
 
             Console.WriteLine("- Testing foreach enumeration...");
             int count = 0;
