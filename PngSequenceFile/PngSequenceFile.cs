@@ -48,6 +48,7 @@ namespace Blayms.PNGS
                     }
                     uint width = PngParser.ReadBigEndianUInt32(binaryReader);
                     uint height = PngParser.ReadBigEndianUInt32(binaryReader);
+                    int loopCount = PngParser.ReadBigEndianInt32(binaryReader);
                     byte bitDepth = binaryReader.ReadByte();
                     PngColorType colorType = (PngColorType)binaryReader.ReadByte();
                     PngCompressionMethod compressionMethod = (PngCompressionMethod)binaryReader.ReadByte();
@@ -56,6 +57,7 @@ namespace Blayms.PNGS
 
                     Header = new FileHeader();
                     Header.File = this;
+                    Header.LoopCount = loopCount;
                     Header.IHDR = new IHDRHeader(width, height, bitDepth, colorType, compressionMethod, filterMethod, interlaceMethod);
 
                     while (ms.Position < ms.Length)
@@ -256,7 +258,8 @@ namespace Blayms.PNGS
         public class FileHeader
         {
             public const string Signature = "$PNGS";
-            public const short Size = 18;
+            public const short Size = 22;
+            public int LoopCount = -1;
             /// <summary>
             /// <inheritdoc cref="PngSequenceFile"/>
             /// </summary>

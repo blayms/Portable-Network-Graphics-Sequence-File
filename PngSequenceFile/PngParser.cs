@@ -109,8 +109,24 @@ namespace Blayms.PNGS
                 Array.Reverse(bytes);
             return BitConverter.ToUInt32(bytes, 0);
         }
+        internal static int ReadBigEndianInt32(BinaryReader reader)
+        {
+            byte[] bytes = reader.ReadBytes(4);
+            if (BitConverter.IsLittleEndian)
+                Array.Reverse(bytes);
+            return BitConverter.ToInt32(bytes, 0);
+        }
 
         internal static void WriteBigEndianUInt32(BinaryWriter writer, uint value)
+        {
+            byte[] bytes = BitConverter.GetBytes(value);
+            if (BitConverter.IsLittleEndian)
+            {
+                Array.Reverse(bytes);
+            }
+            writer.Write(bytes);
+        }
+        internal static void WriteBigEndianInt32(BinaryWriter writer, int value)
         {
             byte[] bytes = BitConverter.GetBytes(value);
             if (BitConverter.IsLittleEndian)

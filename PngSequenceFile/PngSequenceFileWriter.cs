@@ -28,6 +28,7 @@ namespace Blayms.PNGS
             _writer.Write(Encoding.ASCII.GetBytes(PngSequenceFile.FileHeader.Signature));
             PngParser.WriteBigEndianUInt32(_writer, pngs.Header.IHDR.Width);
             PngParser.WriteBigEndianUInt32(_writer, pngs.Header.IHDR.Height);
+            _writer.Write(pngs.Header.LoopCount);
             _writer.Write(pngs.Header.IHDR.BitDepth);
             _writer.Write((byte)pngs.Header.IHDR.ColorType);
             _writer.Write((byte)pngs.Header.IHDR.CompressionMethod);

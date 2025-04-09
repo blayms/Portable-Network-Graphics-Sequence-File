@@ -17,6 +17,14 @@ namespace Blayms.PNGS.Test
             Console.WriteLine("=== Starting PNG Sequence File Tests ===");
             Console.ResetColor();
 
+            WriteColored("Before testing, would you like to provide a png file to create test *.pnga file and save it to Download? If not, type 'skip' to skip it", ConsoleColor.Cyan);
+            string? input0 = Console.ReadLine();
+            if (input0 != null && !input0.Equals("skip", StringComparison.OrdinalIgnoreCase))
+            {
+                CreateAndSaveToDownloads(input0);
+            }
+
+
             TestEmptyFileCreation();
             TestFileHeaderSignature();
             TestSequenceOperations();
@@ -32,7 +40,7 @@ namespace Blayms.PNGS.Test
 
             TestEnumeratorBehavior();
 
-            WriteColored("\n[NOTICE] Before testing png encoding on a first sequence, please provide a *.png file path or type 'skip' to skip", ConsoleColor.Cyan);
+            WriteColored("\n[NOTICE] Before testing png encoding, swapping on a first sequence and log loop count, please provide a *.png file path or type 'skip' to skip", ConsoleColor.Cyan);
             string? input2 = Console.ReadLine();
             if (input2 != null && !input2.Equals("skip", StringComparison.OrdinalIgnoreCase))
             {
@@ -42,6 +50,19 @@ namespace Blayms.PNGS.Test
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("=== All Tests Completed ===");
             Console.ResetColor();
+        }
+        private static void CreateAndSaveToDownloads(string pngFile)
+        {
+            PngSequenceFile png = PngSequenceFile.ConstructFromPNGWithEqualDuration(false, 100,
+                pngFile, pngFile, pngFile
+                );
+            using (FileStream fs = new FileStream(@$"C:\Users\{Environment.UserName}\Downloads\test.pngs", FileMode.OpenOrCreate))
+            {
+                using (PngSequenceFileWriter pngsW = new PngSequenceFileWriter(fs))
+                {
+                    pngsW.Write(png);
+                }
+            }
         }
         private static void TestEncodingAndSwappingFirstSequenceToPNG(string pngsPath)
         {
@@ -68,6 +89,8 @@ namespace Blayms.PNGS.Test
             {
                 WriteColored($"[FAIL] Failed to swap PNG from sequence #1 to sequence #0!\nException: {ex}", ConsoleColor.Red);
             }
+
+            WriteColored($"[LOG] Loop Count: {pngFile.Header.LoopCount}!", ConsoleColor.DarkMagenta);
         }
         private static void TestEmptyFileCreation()
         {
