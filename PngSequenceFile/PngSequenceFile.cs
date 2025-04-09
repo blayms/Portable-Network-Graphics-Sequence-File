@@ -264,7 +264,7 @@ namespace Blayms.PNGS
             /// <summary>
             /// <inheritdoc cref="IHDRHeader"/>
             /// </summary>
-            internal IHDRHeader IHDR { get; set; }
+            public IHDRHeader IHDR { get; set; }
             public FileHeader()
             {
 
