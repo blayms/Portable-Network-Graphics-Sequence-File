@@ -116,10 +116,19 @@ namespace Blayms.PNGS
             }
             return pngs;
         }
+        /// <summary>
+        /// Creates an instance of <see cref="PngSequenceFile"/> from directly from *.png file paths with equal duration<br>for each sequence and builds it's header depending on the least or most valuable sequence.</br>
+        /// </summary>
+        /// <param name="preferMaximizedValues">Defines if header should be constructed from the least or the most valuable sequence in the collection</param>
+        /// <param name="msDuration">Defines how many milliseconds each sequence will last</param>
+        /// <param name="pngFiles">*.png file paths</param>
         public static PngSequenceFile ConstructFromPNGWithEqualDuration(bool preferMaximizedValues, int msDuration, params string[] pngFiles)
         {
             return ConstructFromPNGWithEqualDuration(preferMaximizedValues, msDuration, InternalHelper.PathsToBytes(pngFiles));
         }
+        /// <summary>
+        /// Adds a <see cref="Sequence"/> to the file
+        /// </summary>
         public void AddSequence(Sequence sequence)
         {
             if (!Sequences.Contains(sequence))
@@ -127,6 +136,9 @@ namespace Blayms.PNGS
                 Sequences.Add(sequence);
             }
         }
+        /// <summary>
+        /// Insert a <see cref="Sequence"/> to the file
+        /// </summary>
         public void InsertSequence(int index, Sequence sequence)
         {
             if (!Sequences.Contains(sequence))
@@ -134,10 +146,16 @@ namespace Blayms.PNGS
                 Sequences.Insert(index, sequence);
             }
         }
+        /// <summary>
+        /// Does it contain a <see cref="Sequence"/> in the file?
+        /// </summary>
         public bool ContainsSequence(Sequence sequence)
         {
             return Sequences.Contains(sequence);
         }
+        /// <summary>
+        /// Adds a range of <see cref="Sequence"/> instances to the file
+        /// </summary>
         public void AddRangeOfSequences(ICollection<Sequence> sequences)
         {
             IEnumerator<Sequence> enumerator = sequences.GetEnumerator();
@@ -146,6 +164,9 @@ namespace Blayms.PNGS
                 AddSequence(enumerator.Current);
             }
         }
+        /// <summary>
+        /// <inheritdoc cref="AddRangeOfSequences(ICollection{Sequence})"/>
+        /// </summary>
         public void AddRangeOfSequences(params Sequence[] sequences)
         {
             for (int i = 0; i < sequences.Length; i++)
@@ -153,6 +174,9 @@ namespace Blayms.PNGS
                 AddSequence(sequences[i]);
             }
         }
+        /// <summary>
+        /// Removes a <see cref="Sequence"/> from the file
+        /// </summary>
         public void RemoveSequence(Sequence sequence)
         {
             if (Sequences.Contains(sequence))
@@ -160,6 +184,9 @@ namespace Blayms.PNGS
                 Sequences.Remove(sequence);
             }
         }
+        /// <summary>
+        /// Removes a <see cref="Sequence"/> at the certain index from the file
+        /// </summary>
         public void RemoveSequenceAt(int index)
         {
             if (Sequences.Count >= index)
@@ -256,28 +283,61 @@ namespace Blayms.PNGS
             internal IHDRHeader ihdrChunk;
             public const string Signature = "$SEQ";
             public PngSequenceFile File { get; internal set; }
+            /// <summary>
+            /// Pixel data of *.png file in a 1D array
+            /// </summary>
             public byte[] Pixels { get; internal set; }
+            /// <summary>
+            /// Duration / Length of the sequence in milliseconds (ms)
+            /// </summary>
             public int Length { get; internal set; }
+            /// <summary>
+            /// An amount of pixels from <see cref="Pixels"/>
+            /// </summary>
             public int PixelsCount => Pixels.Length;
             public Sequence()
             {
 
             }
+            /// <summary>
+            /// Converts this sequence to *.png bytes
+            /// </summary>
+            /// <returns></returns>
+            public byte[] EncodeToPNG()
+            {
+                return PngParser.Write(File.Header.IHDR, Pixels);
+            }
+            /// <summary>
+            /// Creates an instance of <see cref="Sequence"/> from *.png file path duration in milliseconds (ms)
+            /// </summary>
+            /// <param name="pngPath">*.png file path</param>
+            /// <param name="msLength">Duration in milliseconds (ms)</param>
             public Sequence(string pngPath, int msLength) : this(System.IO.File.ReadAllBytes(pngPath), msLength)
             {
 
             }
+            /// <summary>
+            /// Creates an instance of <see cref="Sequence"/> from *.png file bytes duration in milliseconds (ms)
+            /// </summary>
+            /// <param name="pngBytes">*.png file bytes</param>
+            /// <param name="msLength">Duration in milliseconds (ms)</param>
             public Sequence(byte[] pngBytes, int msLength)
             {
                 SwapPng(pngBytes);
                 Length = msLength;
             }
+            /// <summary>
+            /// Changes the image data of this sequence from bytes
+            /// </summary>
             public void SwapPng(byte[] pngData)
             {
                 (IHDRHeader, byte[]) png = PngParser.Read(pngData);
                 ihdrChunk = png.Item1;
                 Pixels = png.Item2;
             }
+            /// <summary>
+            /// Changes the image data of this sequence from file path
+            /// </summary>
             public void SwapPng(string pngBytes)
             {
                 SwapPng(System.IO.File.ReadAllBytes(pngBytes));
