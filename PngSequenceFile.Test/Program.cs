@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Net.NetworkInformation;
+using System.Text.Json;
 
 namespace Blayms.PNGS.Test
 {
@@ -24,19 +25,51 @@ namespace Blayms.PNGS.Test
             TestConstructFromPNGBytes();
 
             WriteColored("\n[NOTICE] Before testing serialization, please provide a *.png file path or type 'skip' to skip", ConsoleColor.Cyan);
-            string? input = Console.ReadLine();
-            if (input != null && !input.Equals("skip", StringComparison.OrdinalIgnoreCase))
+            string? input1 = Console.ReadLine();
+            if (input1 != null && !input1.Equals("skip", StringComparison.OrdinalIgnoreCase))
             {
-                TestFileSerialization(input);
+                TestFileSerialization(input1);
             }
 
             TestEnumeratorBehavior();
+
+            WriteColored("\n[NOTICE] Before testing png encoding on a first sequence, please provide a *.png file path or type 'skip' to skip", ConsoleColor.Cyan);
+            string? input2 = Console.ReadLine();
+            if (input2 != null && !input2.Equals("skip", StringComparison.OrdinalIgnoreCase))
+            {
+                TestEncodingAndSwappingFirstSequenceToPNG(input2);
+            }
 
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("=== All Tests Completed ===");
             Console.ResetColor();
         }
+        private static void TestEncodingAndSwappingFirstSequenceToPNG(string pngsPath)
+        {
+            WriteColored("\n[TEST] Testing encoding and swapping PNG in the first sequence...", ConsoleColor.White);
+            PngSequenceFile pngFile = new PngSequenceFile(pngsPath);
 
+            try
+            {
+                byte[] png = pngFile[0].EncodeToPNG();
+                File.WriteAllBytes(@$"C:\Users\{Environment.UserName}\Downloads\pngtest.png", png);
+                WriteColored(@$"[PASS] Tested encoding successfully. Final byte length: {png.Length}{Environment.NewLine}Check the file located at: C:\Users\{Environment.UserName}\Downloads\pngtest.png", ConsoleColor.Green);
+            }
+            catch(Exception ex)
+            {
+                WriteColored($"[FAIL] Failed to encode to PNG!\nException: {ex}", ConsoleColor.Red);
+            }
+
+            try
+            {
+                pngFile[0].SwapPng(pngFile[1].EncodeToPNG());
+                WriteColored($"[PASS] Tested swapping successfully!", ConsoleColor.Green);
+            }
+            catch (Exception ex)
+            {
+                WriteColored($"[FAIL] Failed to swap PNG from sequence #1 to sequence #0!\nException: {ex}", ConsoleColor.Red);
+            }
+        }
         private static void TestEmptyFileCreation()
         {
             WriteColored("\n[TEST] Testing empty file creation...", ConsoleColor.White);

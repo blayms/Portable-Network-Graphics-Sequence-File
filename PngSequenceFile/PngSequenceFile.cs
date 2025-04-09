@@ -71,9 +71,24 @@ namespace Blayms.PNGS
                         Sequence sequence = new Sequence();
                         sequence.Length = seqLength;
                         sequence.Pixels = pixels;
+                        sequence.File = this;
                         AddSequence(sequence);
                     }
                 }
+            }
+        }
+        /// <summary>
+        /// Get a sequence by index
+        /// </summary>
+        public Sequence this[int index]
+        {
+            get
+            {
+                return Sequences[index];
+            }
+            set
+            {
+                Sequences[index] = value;
             }
         }
         public PngSequenceFile()
