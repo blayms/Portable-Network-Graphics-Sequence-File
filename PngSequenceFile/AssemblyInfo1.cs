@@ -16,4 +16,4 @@ using System.Runtime.InteropServices;
 // The following GUID is for the ID of the typelib if this project is exposed to COM.
 
 [assembly: Guid("6c90bc07-a4d5-4118-943a-efbe163e6e92")]
-[assembly: InternalsVisibleTo("PngSequenceFile.Test")]
+[assembly: InternalsVisibleTo("Blayms.PNGS.Test")]

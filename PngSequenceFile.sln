@@ -5,7 +5,7 @@ VisualStudioVersion = 17.13.35919.96 d17.13
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blayms.PNGS", "PngSequenceFile\Blayms.PNGS.csproj", "{61A4C2B3-C3BB-44BE-B297-8EAF521C57F4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PngSequenceFile.Test", "PngSequenceFile.Test\PngSequenceFile.Test.csproj", "{036D1F57-45B7-46CF-B335-DEEB329929C9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blayms.PNGS.Test", "PngSequenceFile.Test\Blayms.PNGS.Test.csproj", "{036D1F57-45B7-46CF-B335-DEEB329929C9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
