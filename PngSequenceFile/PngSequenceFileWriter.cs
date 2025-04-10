@@ -51,7 +51,7 @@ namespace Blayms.PNGS
                 metadataEncodedEntries[currentMetadata] = Encoding.ASCII.GetBytes(metadataEntries.Current);
                 currentMetadata++;
             }
-            _writer.Write((uint)(metadataEncodedEntries.Sum(x => x.Length)));
+            _writer.Write((uint)pngs.Header.GetMetadataCount());
             for (int i = 0; i < metadataEncodedEntries.Length; i++)
             {
                 _writer.Write((uint)metadataEncodedEntries[i].Length);

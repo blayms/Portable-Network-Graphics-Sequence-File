@@ -79,9 +79,9 @@ namespace Blayms.PNGS
                     {
                         throw new Exceptions.PNGSReadFailedException($"no {FileHeader.MetadataSignature} signature was found at byte #{ms.Position}!");
                     }
-                    uint metadataEntireLength = binaryReader.ReadUInt32();
-                    string[] metadataEntries = new string[metadataEntireLength];
-                    for (uint i = 0; i < metadataEntireLength; i++)
+                    uint metaCount = binaryReader.ReadUInt32();
+                    string[] metadataEntries = new string[metaCount];
+                    for (uint i = 0; i < metadataEntries.Length; i++)
                     {
                         uint entryLength = binaryReader.ReadUInt32();
                         Header.AddMetadata(Encoding.ASCII.GetString(binaryReader.ReadBytes((int)entryLength)));

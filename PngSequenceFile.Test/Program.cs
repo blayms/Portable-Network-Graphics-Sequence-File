@@ -60,7 +60,7 @@ namespace Blayms.PNGS.Test
 
             TestEnumeratorBehavior();
 
-            WriteColored("\n[NOTICE] Before testing png encoding, swapping on a first sequence and log loop count, please provide a *.png file path or type 'skip' to skip", ConsoleColor.Cyan);
+            WriteColored("\n[NOTICE] Before testing png encoding, swapping on a first sequence and log loop count + all metadata, please provide a *.png file path or type 'skip' to skip", ConsoleColor.Cyan);
             string? input2 = Console.ReadLine();
             if (input2 != null && !input2.Equals("skip", StringComparison.OrdinalIgnoreCase))
             {
@@ -118,6 +118,12 @@ namespace Blayms.PNGS.Test
             }
 
             WriteColored($"[LOG] Loop Count: {pngFile.Header.LoopCount}!", ConsoleColor.DarkMagenta);
+            WriteColored($"[LOG] All metadata entries: {pngFile.Header.GetMetadataCount()}!", ConsoleColor.DarkMagenta);
+            for (int i = 0; i < pngFile.Header.GetMetadataCount(); i++)
+            {
+                string meta = pngFile.Header.GetMetadataAt(i);
+                WriteColored($"   #{i}: {meta}", ConsoleColor.DarkMagenta);
+            }
         }
         private static void TestEmptyFileCreation()
         {
