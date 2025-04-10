@@ -1,4 +1,3 @@
-
 # Portable Network Graphics Sequence File
 
 This is a relatively simple file format I created in one day. It's structured similarly to *.gif files. The format was inspired by my old Baldi's Basics Plus mod codenamed "MLMBC" (Monday Left Me Broken Cat). This mod replaced all tile textures with MP4 files to animate the tiles.
@@ -14,3 +13,5 @@ Because this is a collection of PNG images, I named it "**Portable Network Graph
 
 ## Structure
 ![](https://file.garden/Z-1IetWhPAglb4Fv/pngsgithub.svg)
+## Special Thanks
+- [l4net by Krashan on NuGet](https://www.nuget.org/packages/lz4net/)
