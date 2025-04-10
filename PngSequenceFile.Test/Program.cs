@@ -17,11 +17,31 @@ namespace Blayms.PNGS.Test
             Console.WriteLine("=== Starting PNG Sequence File Tests ===");
             Console.ResetColor();
 
-            WriteColored("Before testing, would you like to provide a png file to create test *.pnga file and save it to Download? If not, type 'skip' to skip it", ConsoleColor.Cyan);
+            WriteColored("Before testing, would you like to provide a pattern to create test *.pngs file and save it to Download folder? If not, type 'skip' to skip it\nPattern example: C:\\Users\\mfres\\Downloads\\anim\\;fileNameContains;PNGSfileName;1000;-1\nPATH;FILENAME_PART;OUTPUT_NAME;EQUAL_DURATION;LOOP_COUNT (-1 for infinity)", ConsoleColor.Cyan);
             string? input0 = Console.ReadLine();
+            WriteColored("Do you want any metadata entries? Type a number of entries. Just skip or type 0 to ignore", ConsoleColor.Cyan);
+            string? metadataNumStr = Console.ReadLine();
+            int metadataNum = 0;
+            if (metadataNumStr != null && !metadataNumStr.StartsWith("0"))
+            {
+                if (int.TryParse(metadataNumStr, out int parsed))
+                {
+                    metadataNum = parsed;
+                }
+            }
+            string[] metadatas = new string[metadataNum];
+            for (int i = 0; i < metadataNum; i++)
+            {
+                WriteColored($"Provide metadata entry #{i}", ConsoleColor.Cyan);
+                string? entry = Console.ReadLine();
+                if (entry != null)
+                {
+                    metadatas[i] = entry;
+                }
+            }
             if (input0 != null && !input0.Equals("skip", StringComparison.OrdinalIgnoreCase))
             {
-                CreateAndSaveToDownloads(input0);
+                CreateAndSaveToDownloads(input0, metadatas);
             }
 
 
@@ -51,12 +71,19 @@ namespace Blayms.PNGS.Test
             Console.WriteLine("=== All Tests Completed ===");
             Console.ResetColor();
         }
-        private static void CreateAndSaveToDownloads(string pngFile)
+        private static void CreateAndSaveToDownloads(string pattern, string[] metadatas)
         {
-            PngSequenceFile png = PngSequenceFile.ConstructFromPNGWithEqualDuration(false, 100,
-                pngFile, pngFile, pngFile
-                );
-            using (FileStream fs = new FileStream(@$"C:\Users\{Environment.UserName}\Downloads\test.pngs", FileMode.OpenOrCreate))
+            string[] splits = pattern.Split(";");
+            string folderPath = splits[0];
+            string[] matchingFiles = Directory.GetFiles(folderPath, "*.png", SearchOption.TopDirectoryOnly).Where(f => Path.GetFileName(f).Contains(splits[1])).ToArray();
+            Console.WriteLine(splits[3]);
+            PngSequenceFile png = PngSequenceFile.ConstructFromPNGWithEqualDuration(false, uint.Parse(splits[3]), matchingFiles);
+            png.Header.LoopCount = int.Parse(splits[4]);
+            for (int i = 0; i < metadatas.Length; i++)
+            {
+                png.Header.AddMetadata(metadatas[i]);
+            }
+            using (FileStream fs = new FileStream(@$"C:\Users\{Environment.UserName}\Downloads\{splits[2]}.pngs", FileMode.OpenOrCreate))
             {
                 using (PngSequenceFileWriter pngsW = new PngSequenceFileWriter(fs))
                 {
@@ -75,7 +102,7 @@ namespace Blayms.PNGS.Test
                 File.WriteAllBytes(@$"C:\Users\{Environment.UserName}\Downloads\pngtest.png", png);
                 WriteColored(@$"[PASS] Tested encoding successfully. Final byte length: {png.Length}{Environment.NewLine}Check the file located at: C:\Users\{Environment.UserName}\Downloads\pngtest.png", ConsoleColor.Green);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 WriteColored($"[FAIL] Failed to encode to PNG!\nException: {ex}", ConsoleColor.Red);
             }

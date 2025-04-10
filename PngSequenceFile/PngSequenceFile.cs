@@ -24,6 +24,21 @@ namespace Blayms.PNGS
         /// </summary>
         public int Count => Sequences.Count;
         /// <summary>
+        /// Total duration / length of the entire file in milliseconds (ms)
+        /// </summary>
+        public uint TotalLengthMs
+        {
+            get
+            {
+                uint ms = 0;
+                for (int i = 0; i < Sequences.Count; i++)
+                {
+                    ms += Sequences[i].Length;
+                }
+                return ms;
+            }
+        }
+        /// <summary>
         /// Creates an instance of <see cref="PngSequenceFile"/> from file path
         /// </summary>
         /// <param name="filePath">File path</param>
@@ -42,10 +57,15 @@ namespace Blayms.PNGS
             {
                 using (BinaryReader binaryReader = new BinaryReader(ms))
                 {
+                    Header = new FileHeader();
+
                     if (Encoding.ASCII.GetString(binaryReader.ReadBytes(5)) != FileHeader.Signature)
                     {
                         throw new Exceptions.PNGSReadFailedException($"no {FileHeader.Signature} signature was found at byte #{ms.Position}!");
                     }
+
+                    Header.Version = binaryReader.ReadSingle();
+
                     uint width = PngParser.ReadBigEndianUInt32(binaryReader);
                     uint height = PngParser.ReadBigEndianUInt32(binaryReader);
                     int loopCount = PngParser.ReadBigEndianInt32(binaryReader);
@@ -55,7 +75,18 @@ namespace Blayms.PNGS
                     PngFilterMode filterMethod = (PngFilterMode)binaryReader.ReadByte();
                     PngInterlaceMethod interlaceMethod = (PngInterlaceMethod)binaryReader.ReadByte();
 
-                    Header = new FileHeader();
+                    if (Encoding.ASCII.GetString(binaryReader.ReadBytes(4)) != FileHeader.MetadataSignature)
+                    {
+                        throw new Exceptions.PNGSReadFailedException($"no {FileHeader.MetadataSignature} signature was found at byte #{ms.Position}!");
+                    }
+                    uint metadataEntireLength = binaryReader.ReadUInt32();
+                    string[] metadataEntries = new string[metadataEntireLength];
+                    for (uint i = 0; i < metadataEntireLength; i++)
+                    {
+                        uint entryLength = binaryReader.ReadUInt32();
+                        Header.AddMetadata(Encoding.ASCII.GetString(binaryReader.ReadBytes((int)entryLength)));
+                    }
+
                     Header.File = this;
                     Header.LoopCount = loopCount;
                     Header.IHDR = new IHDRHeader(width, height, bitDepth, colorType, compressionMethod, filterMethod, interlaceMethod);
@@ -66,9 +97,9 @@ namespace Blayms.PNGS
                         {
                             throw new Exceptions.PNGSReadFailedException($"no {SequenceElement.Signature} signature was found at byte #{ms.Position}!");
                         }
-                        int pixelsCount = binaryReader.ReadInt32();
-                        int seqLength = binaryReader.ReadInt32();
-                        byte[] pixels = binaryReader.ReadBytes(pixelsCount);
+                        int pixelsCountCompressed = (int)binaryReader.ReadUInt32();
+                        uint seqLength = binaryReader.ReadUInt32();
+                        byte[] pixels = PngSequenceFileWriter.DecompressData(binaryReader.ReadBytes(pixelsCountCompressed));
 
                         SequenceElement sequence = new SequenceElement();
                         sequence.Length = seqLength;
@@ -119,7 +150,7 @@ namespace Blayms.PNGS
         /// <param name="preferMaximizedValues">Defines if header should be constructed from the least or the most valuable sequence element in the collection</param>
         /// <param name="msDuration">Defines how many milliseconds each sequence element will last</param>
         /// <param name="pngBytes">*.png bytes</param>
-        public static PngSequenceFile ConstructFromPNGWithEqualDuration(bool preferMaximizedValues, int msDuration, params byte[][] pngBytes)
+        public static PngSequenceFile ConstructFromPNGWithEqualDuration(bool preferMaximizedValues, uint msDuration, params byte[][] pngBytes)
         {
             PngSequenceFile pngs = new PngSequenceFile();
             for (int i = 0; i < pngBytes.Length; i++)
@@ -139,7 +170,7 @@ namespace Blayms.PNGS
         /// <param name="preferMaximizedValues">Defines if header should be constructed from the least or the most valuable sequence element in the collection</param>
         /// <param name="msDuration">Defines how many milliseconds each sequence element will last</param>
         /// <param name="pngFiles">*.png file paths</param>
-        public static PngSequenceFile ConstructFromPNGWithEqualDuration(bool preferMaximizedValues, int msDuration, params string[] pngFiles)
+        public static PngSequenceFile ConstructFromPNGWithEqualDuration(bool preferMaximizedValues, uint msDuration, params string[] pngFiles)
         {
             return ConstructFromPNGWithEqualDuration(preferMaximizedValues, msDuration, InternalHelper.PathsToBytes(pngFiles));
         }
@@ -257,9 +288,17 @@ namespace Blayms.PNGS
         [Serializable]
         public class FileHeader
         {
+            public const string MetadataSignature = "$MET";
             public const string Signature = "$PNGS";
             public const short Size = 22;
             public int LoopCount = -1;
+
+            private List<string> metadata = new List<string>();
+            /// <summary>
+            /// The revision number of this file
+            /// </summary>
+            public float Version { get; internal set; } = 0; // NOTE: DO NOT FORGET TO CHANGE THIS VALUE AS A DEVELOPER
+
             /// <summary>
             /// <inheritdoc cref="PngSequenceFile"/>
             /// </summary>
@@ -271,6 +310,59 @@ namespace Blayms.PNGS
             public FileHeader()
             {
 
+            }
+            /// <summary>
+            /// Removes a metadata entry at specified index
+            /// </summary>
+            public void RemoveMetadataAt(int index)
+            {
+                if (metadata.Count >= index)
+                {
+                    metadata.RemoveAt(index);
+                }
+            }
+            /// <summary>
+            /// Adds specified metadata entry
+            /// </summary>
+            public void AddMetadata(string value)
+            {
+                if (!metadata.Contains(value))
+                {
+                    metadata.Add(value);
+                }
+            }
+            /// <summary>
+            /// Removes specified metadata entry
+            /// </summary>
+            /// <param name="value"></param>
+            public void RemoveMetadata(string value)
+            {
+                if (metadata.Contains(value))
+                {
+                    metadata.Remove(value);
+                }
+            }
+            /// <summary>
+            /// Returns a metadata entry at specified index
+            /// </summary>
+            public string GetMetadataAt(int index)
+            {
+                return metadata[index];
+            }
+            /// <summary>
+            /// Gets enumerator for all metadata entries. See <see cref="IEnumerator{T}"/>
+            /// </summary>
+            /// <returns></returns>
+            public IEnumerator<string> GetMetadataEnumerator()
+            {
+                return metadata.GetEnumerator();
+            }
+            /// <summary>
+            /// Returns a number of entries in metadata
+            /// </summary>
+            public int GetMetadataCount()
+            {
+                return metadata.Count;
             }
             internal FileHeader(PngSequenceFile file, bool preferMaximized)
             {
@@ -308,11 +400,11 @@ namespace Blayms.PNGS
             /// <summary>
             /// Duration / Length of the sequence in milliseconds (ms)
             /// </summary>
-            public int Length { get; internal set; }
+            public uint Length { get; internal set; }
             /// <summary>
             /// An amount of pixels from <see cref="Pixels"/>
             /// </summary>
-            public int PixelsCount => Pixels.Length;
+            public uint PixelsCount => (uint)Pixels.Length;
             public SequenceElement()
             {
 
@@ -330,7 +422,7 @@ namespace Blayms.PNGS
             /// </summary>
             /// <param name="pngPath">*.png file path</param>
             /// <param name="msLength">Duration in milliseconds (ms)</param>
-            public SequenceElement(string pngPath, int msLength) : this(System.IO.File.ReadAllBytes(pngPath), msLength)
+            public SequenceElement(string pngPath, uint msLength) : this(System.IO.File.ReadAllBytes(pngPath), msLength)
             {
 
             }
@@ -339,7 +431,7 @@ namespace Blayms.PNGS
             /// </summary>
             /// <param name="pngBytes">*.png file bytes</param>
             /// <param name="msLength">Duration in milliseconds (ms)</param>
-            public SequenceElement(byte[] pngBytes, int msLength)
+            public SequenceElement(byte[] pngBytes, uint msLength)
             {
                 SwapPng(pngBytes);
                 Length = msLength;
