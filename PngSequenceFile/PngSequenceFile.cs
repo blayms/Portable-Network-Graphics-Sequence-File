@@ -332,6 +332,13 @@ namespace Blayms.PNGS
                 }
             }
             /// <summary>
+            /// Returns a metadata entry under certain predicate
+            /// </summary>
+            public IEnumerable<string> GetMetadataWhere(Func<string, bool> predicate)
+            {
+                return metadata.Where(predicate);
+            }
+            /// <summary>
             /// Removes specified metadata entry
             /// </summary>
             /// <param name="value"></param>
