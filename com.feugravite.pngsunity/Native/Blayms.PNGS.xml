@@ -1,0 +1,361 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Blayms.PNGS</name>
+    </assembly>
+    <members>
+        <member name="T:Blayms.PNGS.IHDRHeader">
+            <summary>
+            Represents the IHDR chunk of a PNG file, containing the image's metadata.
+            </summary>
+        </member>
+        <member name="F:Blayms.PNGS.IHDRHeader.Width">
+            <summary>
+            Image width in pixels
+            </summary>
+        </member>
+        <member name="F:Blayms.PNGS.IHDRHeader.Height">
+            <summary>
+            Image height in pixels
+            </summary>
+        </member>
+        <member name="F:Blayms.PNGS.IHDRHeader.BitDepth">
+            <summary>
+            Bit depth (number of bits per sample or palette index)
+            </summary>
+        </member>
+        <member name="F:Blayms.PNGS.IHDRHeader.ColorType">
+            <summary>
+            Color type of the PNG image
+            </summary>
+        </member>
+        <member name="F:Blayms.PNGS.IHDRHeader.CompressionMethod">
+            <summary>
+            Compression method used
+            </summary>
+        </member>
+        <member name="F:Blayms.PNGS.IHDRHeader.FilterMethod">
+            <summary>
+            Filter method used
+            </summary>
+        </member>
+        <member name="F:Blayms.PNGS.IHDRHeader.InterlaceMethod">
+            <summary>
+            Interlace method used
+            </summary>
+        </member>
+        <member name="F:Blayms.PNGS.IHDRHeader.Size">
+            <summary>
+            Size of the IHDR chunk in bytes
+            </summary>
+        </member>
+        <member name="M:Blayms.PNGS.IHDRHeader.#ctor(System.UInt32,System.UInt32,System.Byte,Blayms.PNGS.PngColorType,Blayms.PNGS.PngCompressionMethod,Blayms.PNGS.PngFilterMode,Blayms.PNGS.PngInterlaceMethod)">
+            <summary>
+            Creates a new IHDR header with the specified parameters
+            </summary>
+            <param name="width">Image width in pixels</param>
+            <param name="height">Image height in pixels</param>
+            <param name="bitDepth">Bit depth (1, 2, 4, 8, or 16)</param>
+            <param name="colorType">Color type of the PNG image</param>
+            <param name="compressionMethod">Compression method used</param>
+            <param name="filterMethod">Filter method used</param>
+            <param name="interlaceMethod">Interlace method used</param>
+        </member>
+        <member name="T:Blayms.PNGS.PngColorType">
+            <summary>
+            Supported PNG color types
+            </summary>
+        </member>
+        <member name="F:Blayms.PNGS.PngColorType.Grayscale">
+            <summary>Grayscale (1, 2, 4, 8, or 16 bits per pixel)</summary>
+        </member>
+        <member name="F:Blayms.PNGS.PngColorType.Truecolor">
+            <summary>Truecolor (8 or 16 bits per sample)</summary>
+        </member>
+        <member name="F:Blayms.PNGS.PngColorType.Indexed">
+            <summary>Indexed-color (1, 2, 4, or 8 bits per pixel)</summary>
+        </member>
+        <member name="F:Blayms.PNGS.PngColorType.GrayscaleAlpha">
+            <summary>Grayscale with alpha (8 or 16 bits per sample)</summary>
+        </member>
+        <member name="F:Blayms.PNGS.PngColorType.TruecolorAlpha">
+            <summary>Truecolor with alpha (8 or 16 bits per sample)</summary>
+        </member>
+        <member name="T:Blayms.PNGS.PngCompressionMethod">
+            <summary>
+            Supported PNG compression methods
+            </summary>
+        </member>
+        <member name="F:Blayms.PNGS.PngCompressionMethod.Deflate">
+            <summary>Deflate/inflate compression with a sliding window</summary>
+        </member>
+        <member name="T:Blayms.PNGS.PngFilterMode">
+            <summary>
+            Supported PNG filter methods
+            </summary>
+        </member>
+        <member name="F:Blayms.PNGS.PngFilterMode.Adaptive">
+            <summary>Adaptive filtering with five basic filter types</summary>
+        </member>
+        <member name="T:Blayms.PNGS.PngInterlaceMethod">
+            <summary>
+            Supported PNG interlace methods
+            </summary>
+        </member>
+        <member name="F:Blayms.PNGS.PngInterlaceMethod.None">
+            <summary>No interlacing</summary>
+        </member>
+        <member name="F:Blayms.PNGS.PngInterlaceMethod.Adam7">
+            <summary>Adam7 interlacing</summary>
+        </member>
+        <member name="T:Blayms.PNGS.PngSequenceFile">
+            <summary>
+            Represents a *.pngs file format made by Blayms
+            </summary>
+        </member>
+        <member name="P:Blayms.PNGS.PngSequenceFile.Header">
+            <summary>
+            <inheritdoc cref="T:Blayms.PNGS.PngSequenceFile.FileHeader"/>
+            </summary>
+        </member>
+        <member name="P:Blayms.PNGS.PngSequenceFile.Count">
+            <summary>
+            An amount of sequence elememts
+            </summary>
+        </member>
+        <member name="P:Blayms.PNGS.PngSequenceFile.TotalLengthMs">
+            <summary>
+            Total duration / length of the entire file in milliseconds (ms)
+            </summary>
+        </member>
+        <member name="M:Blayms.PNGS.PngSequenceFile.#ctor(System.String)">
+            <summary>
+            Creates an instance of <see cref="T:Blayms.PNGS.PngSequenceFile"/> from file path
+            </summary>
+            <param name="filePath">File path</param>
+            <exception cref="T:Blayms.PNGS.Exceptions.PNGSReadFailedException">Signature check failed</exception>
+        </member>
+        <member name="M:Blayms.PNGS.PngSequenceFile.#ctor(System.Byte[])">
+            <summary>
+            Creates an instance of <see cref="T:Blayms.PNGS.PngSequenceFile"/> from file bytes
+            </summary>
+            <param name="fileBytes">File bytes</param>
+            <exception cref="T:Blayms.PNGS.Exceptions.PNGSReadFailedException">Signature check failed</exception>
+        </member>
+        <member name="P:Blayms.PNGS.PngSequenceFile.Item(System.Int32)">
+            <summary>
+            Get a sequence element by index
+            </summary>
+        </member>
+        <member name="M:Blayms.PNGS.PngSequenceFile.ConstructFromSequences(System.Boolean,Blayms.PNGS.PngSequenceFile.SequenceElement[])">
+            <summary>
+            Creates an instance of <see cref="T:Blayms.PNGS.PngSequenceFile"/> from directly from sequence elements and builds it's header depending on the least or most valuable sequence element. 
+            </summary>
+            <param name="preferMaximizedValues">Defines if header should be constructed from the least or the most valuable sequence element in the collection</param>
+            <param name="sequences">Sequences</param>
+        </member>
+        <member name="M:Blayms.PNGS.PngSequenceFile.ConstructFromPNGWithEqualDuration(System.Boolean,System.UInt32,System.Byte[][])">
+            <summary>
+            Creates an instance of <see cref="T:Blayms.PNGS.PngSequenceFile"/> from directly from *.png bytes with equal duration<br>for each sequence element and builds it's header depending on the least or most valuable sequence element.</br>
+            </summary>
+            <param name="preferMaximizedValues">Defines if header should be constructed from the least or the most valuable sequence element in the collection</param>
+            <param name="msDuration">Defines how many milliseconds each sequence element will last</param>
+            <param name="pngBytes">*.png bytes</param>
+        </member>
+        <member name="M:Blayms.PNGS.PngSequenceFile.ConstructFromPNGWithEqualDuration(System.Boolean,System.UInt32,System.String[])">
+            <summary>
+            Creates an instance of <see cref="T:Blayms.PNGS.PngSequenceFile"/> from directly from *.png file paths with equal duration<br>for each sequence element and builds it's header depending on the least or most valuable sequence element.</br>
+            </summary>
+            <param name="preferMaximizedValues">Defines if header should be constructed from the least or the most valuable sequence element in the collection</param>
+            <param name="msDuration">Defines how many milliseconds each sequence element will last</param>
+            <param name="pngFiles">*.png file paths</param>
+        </member>
+        <member name="M:Blayms.PNGS.PngSequenceFile.AddSequence(Blayms.PNGS.PngSequenceFile.SequenceElement)">
+            <summary>
+            Adds a <see cref="T:Blayms.PNGS.PngSequenceFile.SequenceElement"/> to the file
+            </summary>
+        </member>
+        <member name="M:Blayms.PNGS.PngSequenceFile.InsertSequence(System.Int32,Blayms.PNGS.PngSequenceFile.SequenceElement)">
+            <summary>
+            Insert a <see cref="T:Blayms.PNGS.PngSequenceFile.SequenceElement"/> to the file
+            </summary>
+        </member>
+        <member name="M:Blayms.PNGS.PngSequenceFile.ContainsSequence(Blayms.PNGS.PngSequenceFile.SequenceElement)">
+            <summary>
+            Does it contain a <see cref="T:Blayms.PNGS.PngSequenceFile.SequenceElement"/> in the file?
+            </summary>
+        </member>
+        <member name="M:Blayms.PNGS.PngSequenceFile.AddRangeOfSequences(System.Collections.Generic.ICollection{Blayms.PNGS.PngSequenceFile.SequenceElement})">
+            <summary>
+            Adds a range of <see cref="T:Blayms.PNGS.PngSequenceFile.SequenceElement"/> instances to the file
+            </summary>
+        </member>
+        <member name="M:Blayms.PNGS.PngSequenceFile.AddRangeOfSequences(Blayms.PNGS.PngSequenceFile.SequenceElement[])">
+            <summary>
+            <inheritdoc cref="M:Blayms.PNGS.PngSequenceFile.AddRangeOfSequences(System.Collections.Generic.ICollection{Blayms.PNGS.PngSequenceFile.SequenceElement})"/>
+            </summary>
+        </member>
+        <member name="M:Blayms.PNGS.PngSequenceFile.RemoveSequence(Blayms.PNGS.PngSequenceFile.SequenceElement)">
+            <summary>
+            Removes a <see cref="T:Blayms.PNGS.PngSequenceFile.SequenceElement"/> from the file
+            </summary>
+        </member>
+        <member name="M:Blayms.PNGS.PngSequenceFile.RemoveSequenceAt(System.Int32)">
+            <summary>
+            Removes a <see cref="T:Blayms.PNGS.PngSequenceFile.SequenceElement"/> at the certain index from the file
+            </summary>
+        </member>
+        <member name="M:Blayms.PNGS.PngSequenceFile.GetEnumerator">
+            <summary>
+            <para><b>Usage example:</b></para>
+            <code>
+            // Load a PNG sequence file
+            var pngFile = new PngSequenceFile("animation.png");
+            
+            // Iterate through sequences using foreach
+            foreach (var sequenceEl in pngFile)
+            {
+                Console.WriteLine($"SequenceElement with {sequenceEl.Pixels.Length} pixels");
+            }
+            
+            // Alternative: Manual enumeration
+            using (var enumerator = pngFile.GetEnumerator())
+            {
+                while (enumerator.MoveNext())
+                {
+                    var sequence = enumerator.Current;
+                    // Process sequence...
+                }
+            }
+            </code>
+            </summary>
+            <returns>An enumerator that can be used to iterate through the sequences.</returns>
+            <remarks>
+            The enumerator will return sequences in the order they appear in the file.
+            Dispose the enumerator when manual enumeration is complete.
+            </remarks>
+        </member>
+        <member name="M:Blayms.PNGS.PngSequenceFile.System#Collections#IEnumerable#GetEnumerator">
+            <summary>
+            <inheritdoc cref="M:Blayms.PNGS.PngSequenceFile.GetEnumerator"/>
+            </summary>
+        </member>
+        <member name="T:Blayms.PNGS.PngSequenceFile.FileHeader">
+            <summary>
+            Represents a *.pngs file header
+            </summary>
+        </member>
+        <member name="P:Blayms.PNGS.PngSequenceFile.FileHeader.Version">
+            <summary>
+            The revision number of this file
+            </summary>
+        </member>
+        <member name="P:Blayms.PNGS.PngSequenceFile.FileHeader.File">
+            <summary>
+            <inheritdoc cref="T:Blayms.PNGS.PngSequenceFile"/>
+            </summary>
+        </member>
+        <member name="P:Blayms.PNGS.PngSequenceFile.FileHeader.IHDR">
+            <summary>
+            <inheritdoc cref="T:Blayms.PNGS.IHDRHeader"/>
+            </summary>
+        </member>
+        <member name="M:Blayms.PNGS.PngSequenceFile.FileHeader.RemoveMetadataAt(System.Int32)">
+            <summary>
+            Removes a metadata entry at specified index
+            </summary>
+        </member>
+        <member name="M:Blayms.PNGS.PngSequenceFile.FileHeader.AddMetadata(System.String)">
+            <summary>
+            Adds specified metadata entry
+            </summary>
+        </member>
+        <member name="M:Blayms.PNGS.PngSequenceFile.FileHeader.GetMetadataWhere(System.Func{System.String,System.Boolean})">
+            <summary>
+            Returns a metadata entry under certain predicate
+            </summary>
+        </member>
+        <member name="M:Blayms.PNGS.PngSequenceFile.FileHeader.RemoveMetadata(System.String)">
+            <summary>
+            Removes specified metadata entry
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="M:Blayms.PNGS.PngSequenceFile.FileHeader.GetMetadataAt(System.Int32)">
+            <summary>
+            Returns a metadata entry at specified index
+            </summary>
+        </member>
+        <member name="M:Blayms.PNGS.PngSequenceFile.FileHeader.GetMetadataEnumerator">
+            <summary>
+            Gets enumerator for all metadata entries. See <see cref="T:System.Collections.Generic.IEnumerator`1"/>
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Blayms.PNGS.PngSequenceFile.FileHeader.GetMetadataCount">
+            <summary>
+            Returns a number of entries in metadata
+            </summary>
+        </member>
+        <member name="T:Blayms.PNGS.PngSequenceFile.SequenceElement">
+            <summary>
+            Represents a block of data that contains pixels and frame duration
+            </summary>
+        </member>
+        <member name="P:Blayms.PNGS.PngSequenceFile.SequenceElement.Pixels">
+            <summary>
+            Pixel data of *.png file in a 1D array
+            </summary>
+        </member>
+        <member name="P:Blayms.PNGS.PngSequenceFile.SequenceElement.Length">
+            <summary>
+            Duration / Length of the sequence in milliseconds (ms)
+            </summary>
+        </member>
+        <member name="P:Blayms.PNGS.PngSequenceFile.SequenceElement.PixelsCount">
+            <summary>
+            An amount of pixels from <see cref="P:Blayms.PNGS.PngSequenceFile.SequenceElement.Pixels"/>
+            </summary>
+        </member>
+        <member name="M:Blayms.PNGS.PngSequenceFile.SequenceElement.EncodeToPNG">
+            <summary>
+            Converts this sequence element to *.png bytes
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Blayms.PNGS.PngSequenceFile.SequenceElement.#ctor(System.String,System.UInt32)">
+            <summary>
+            Creates an instance of <see cref="T:Blayms.PNGS.PngSequenceFile.SequenceElement"/> from *.png file path duration in milliseconds (ms)
+            </summary>
+            <param name="pngPath">*.png file path</param>
+            <param name="msLength">Duration in milliseconds (ms)</param>
+        </member>
+        <member name="M:Blayms.PNGS.PngSequenceFile.SequenceElement.#ctor(System.Byte[],System.UInt32)">
+            <summary>
+            Creates an instance of <see cref="T:Blayms.PNGS.PngSequenceFile.SequenceElement"/> from *.png file bytes duration in milliseconds (ms)
+            </summary>
+            <param name="pngBytes">*.png file bytes</param>
+            <param name="msLength">Duration in milliseconds (ms)</param>
+        </member>
+        <member name="M:Blayms.PNGS.PngSequenceFile.SequenceElement.SwapPng(System.Byte[])">
+            <summary>
+            Changes the image data of this sequence element from bytes
+            </summary>
+        </member>
+        <member name="M:Blayms.PNGS.PngSequenceFile.SequenceElement.SwapPng(System.String)">
+            <summary>
+            Changes the image data of this sequence element from file path
+            </summary>
+        </member>
+        <member name="T:Blayms.PNGS.PngSequenceFileWriter">
+            <summary>
+            Represent a writer for <see cref="T:Blayms.PNGS.PngSequenceFile"/>
+            </summary>
+        </member>
+        <member name="M:Blayms.PNGS.PngSequenceFileWriter.Write(Blayms.PNGS.PngSequenceFile)">
+            <summary>
+            Writes a specific <see cref="T:Blayms.PNGS.PngSequenceFile"/>
+            </summary>
+        </member>
+    </members>
+</doc>

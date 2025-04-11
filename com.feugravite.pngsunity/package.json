@@ -1,0 +1,28 @@
+{
+  "name": "com.feugravite.pngsunity",
+  "displayName": "PNGS for Unity Engine",
+  "version": "1.0.0",
+  "unity": "6000.0",
+  "description": "Unity Engine support for Portable Network Graphics Sequence files",
+  "dependencies": {
+    "com.unity.inputsystem": "1.11.2",
+    "com.unity.textmeshpro": "3.1.0",
+    "com.unity.nuget.newtonsoft-json": "3.2.1"
+  },
+  "keywords": [],
+  "license": "MIT",
+  "author": {
+    "name": "Blayms",
+    "email": "blaymscontactemail@gmail.com",
+    "url": "https://blayms.github.io/about-me/"
+  },
+  "homepage": "https://blayms.github.io/about-me/",
+  "bugs": {
+    "url": "https://github.com/blayms/local.feugravite.input/issues",
+    "email": "blaymscontactemail@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@github.com:blayms/local.feugravite.input.git"
+  }
+}
