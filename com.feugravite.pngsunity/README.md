@@ -1,27 +1,34 @@
-# Feugravite Input
 
-Feugravite Input is a powerful and highly flexible input handling system built on top of Unity's **New Input System**. This package provides a complex collection of features, offering enhanced capabilities beyond Unity's default input handling. It is designed to support **modifiers, composites, and control types**, making it suitable for advanced input management in Unity projects.
+# Portable Network Graphics Sequence Unity Engine Package
+### An official Unity Engine support for PNGS file format made by the developer (Blayms)!
+> [More about Portable Network Graphics Sequence here](https://github.com/blayms/Portable-Network-Graphics-Sequence-File)
 
-## Features
+In short, PNGS files behave similarly to *.gif, but heavily rely on *.png pixel data instead, which allows solid transparency support straight out of the box! — *.apng analog made by Blayms.
 
-- **Modifiers & Composites** – Supports advanced input customization, allowing complex interactions.
-- **Control Type Handling** – Provides robust handling of various control schemes and devices.
-- **Highly Configurable** – Designed for flexibility to fit diverse game mechanics and input scenarios.
-- **Built-in Control Mapper** – Includes a fully functional and customizable Control Mapper, allowing players to remap controls as needed.
-- **Built on Unity's New Input System** – Leverages the modern Unity Input System for improved performance and extensibility.
+## Unity Package Features
 
-## Installation
+- **Native object wrapper specifically designed for Unity Engine**
+Obviously, to add support for these files, the wrappers had to be included, which extend and express the possibilities of that file format.
+  - **Custom asset importer**
+    - PngSequenceTextureFileUnity - can be imported if no metadata that defines Unity type was found in a file
+    - PngSequenceSpriteFileUnity - can be imported only if metadata `unityType=sprite` was detected
+  - **Custom inspectors**
+    - PNGS asset inspector also contains a preview window with a little player
+  - **Custom icons**
+    - Made by Blayms 
+- **A RenderTexture player (PngSequenceBasicPlayer)**
+Plays *.pngs files straight up on a RenderTexture, which can be used on things like UI or Materials (e.g., for meshes)
 
-To use Feugravite Input as a local package in Unity:
+- **A SpriteRenderer player (PngSequenceSpritePlayer)**
+Plays *.pngs files straight up on a SpriteRenderer, which can be used in 2D or even 2.5D games
 
-1. Open Unity and navigate to **Window > Package Manager**.
-2. Click the **+** button and select **Add package from disk...**.
-3. Locate the `package.json` file inside the Feugravite Input folder and select it.
+## How to Install
+The only way to install a Unity Engine package is through Git and UPM (Unity Package Manager)
+This method requires [Git](https://git-scm.com/downloads) to be installed on your machine!
 
-## Usage
-
-Feugravite Input is designed to work seamlessly with Unity's Input System. Ensure that the **Input System Package** is installed in your project. You can then integrate Feugravite Input by setting up input actions, applying modifiers, and handling input through its flexible API.
-
-## License
-
-MIT. This package is provided as-is. You are free to modify and integrate it into your projects.
+1. Open Unity Package Manager inside the engine
+2. Click on a "+" icon that is near a thing labeled "Sort Names (asc)"
+3. Select "Install package from a git URL..."
+4. Paste this link
+`https://github.com/blayms/Portable-Network-Graphics-Sequence-File.git?path=/com.feugravite.pngsunity`
+5. You're good to go!
