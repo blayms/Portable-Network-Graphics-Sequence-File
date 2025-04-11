@@ -302,7 +302,7 @@ namespace Blayms.PNGS
             /// <summary>
             /// <inheritdoc cref="PngSequenceFile"/>
             /// </summary>
-            public PngSequenceFile File { get; internal set; }
+            [field: NonSerialized] public PngSequenceFile File { get; internal set; }
             /// <summary>
             /// <inheritdoc cref="IHDRHeader"/>
             /// </summary>
@@ -399,7 +399,7 @@ namespace Blayms.PNGS
         {
             internal IHDRHeader ihdrChunk;
             public const string Signature = "$SEQ";
-            public PngSequenceFile File { get; internal set; }
+            [field: NonSerialized] public PngSequenceFile File { get; internal set; }
             /// <summary>
             /// Pixel data of *.png file in a 1D array
             /// </summary>
