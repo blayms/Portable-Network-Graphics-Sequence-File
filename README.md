@@ -14,7 +14,7 @@ Because this is a collection of PNG images, I named it "**Portable Network Graph
 > Currently, the Unity Engine package is not finished, unstable. I do not recommend to use it
 
 The only way to install a Unity Engine package is through Git and UPM (Unity Package Manager)
-This method requires Git to be installed on your machine!
+This method requires [Git](https://git-scm.com/downloads) to be installed on your machine!
 
 1. Open Unity Package Manager inside the engine
 2. Click on a "+" icon that is near a thing labeled "Sort Names (asc)"
