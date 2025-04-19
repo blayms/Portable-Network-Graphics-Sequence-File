@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace Blayms.PNGS.Unity
 {
     internal static class InternalHelper
     {
-        public static TFile CreateFromRawData<TFile, TSource>(PngSequenceFile raw, out UnityEngine.Object[] outputSources, out UnityEngine.Object[] potentialSubAssets) where TSource : UnityEngine.Object where TFile : PngSequenceFileUnity<TSource>
+        public static TFile CreateFromRawData<TFile, TSource>(PngSequenceFile raw, out Object[] outputSources, out Object[] potentialSubAssets) where TSource : Object where TFile : PngSequenceFileUnity<TSource>
         {
             TFile pngsUnity = ScriptableObject.CreateInstance<TFile>();
             pngsUnity.native = raw;
@@ -33,5 +29,6 @@ namespace Blayms.PNGS.Unity
             potentialSubAssets = potentialSubAssetsList.ToArray();
             return pngsUnity;
         }
+        
     }
 }

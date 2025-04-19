@@ -3,7 +3,8 @@ using UnityEngine;
 
 namespace Blayms.PNGS.Unity
 {
-    public class PngSequenceSpritePlayer : PngSequencePlayerBase<SpriteRenderer, Sprite>
+    [AddComponentMenu("Feugravite/PNG Sequence Sprite Player")]
+    public sealed class PngSequenceSpritePlayer : PngSequencePlayerBase<SpriteRenderer, Sprite>
     {
         protected override void PerformFrame()
         {

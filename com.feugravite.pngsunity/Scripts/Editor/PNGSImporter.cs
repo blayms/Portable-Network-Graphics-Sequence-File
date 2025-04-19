@@ -27,6 +27,9 @@ namespace Blayms.PNGS.Unity.Editor
                     case "sprite":
                         sourceType = typeof(Sprite).Name;
                         break;
+                    case "texture2d":
+                        sourceType = typeof(Texture2D).Name;
+                        break;
                 }
             }
             Object[] objectsToSub = new Object[0];

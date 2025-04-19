@@ -108,6 +108,16 @@
         <member name="F:Blayms.PNGS.PngInterlaceMethod.Adam7">
             <summary>Adam7 interlacing</summary>
         </member>
+        <member name="M:Blayms.PNGS.PngParser.ToTruecolorAlpha(System.Byte[])">
+            <summary>
+            Converts any input PNG bytes into a valid Truecolor+Alpha PNG.
+            </summary>
+        </member>
+        <member name="M:Blayms.PNGS.PngParser.ToTruecolorAlphaWithHeader(System.Byte[])">
+            <summary>
+            Converts any input PNG bytes into a valid TruecolorAlpha PNG and returns both the IHDR header and the new PNG data.
+            </summary>
+        </member>
         <member name="T:Blayms.PNGS.PngSequenceFile">
             <summary>
             Represents a *.pngs file format made by Blayms
@@ -171,6 +181,11 @@
             <param name="pngFiles">*.png file paths</param>
         </member>
         <member name="M:Blayms.PNGS.PngSequenceFile.AddSequence(Blayms.PNGS.PngSequenceFile.SequenceElement)">
+            <summary>
+            Adds a <see cref="T:Blayms.PNGS.PngSequenceFile.SequenceElement"/> to the file
+            </summary>
+        </member>
+        <member name="M:Blayms.PNGS.PngSequenceFile.SwapSequenceElements(System.Int32,System.Int32)">
             <summary>
             Adds a <see cref="T:Blayms.PNGS.PngSequenceFile.SequenceElement"/> to the file
             </summary>
@@ -265,6 +280,11 @@
             Removes a metadata entry at specified index
             </summary>
         </member>
+        <member name="M:Blayms.PNGS.PngSequenceFile.FileHeader.IsValidMetadataIndex(System.Int32)">
+            <summary>
+            Checks if the index is in metadata range
+            </summary>
+        </member>
         <member name="M:Blayms.PNGS.PngSequenceFile.FileHeader.AddMetadata(System.String)">
             <summary>
             Adds specified metadata entry
@@ -278,6 +298,12 @@
         <member name="M:Blayms.PNGS.PngSequenceFile.FileHeader.RemoveMetadata(System.String)">
             <summary>
             Removes specified metadata entry
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="M:Blayms.PNGS.PngSequenceFile.FileHeader.ContainsMetadata(System.String)">
+            <summary>
+            Contains specified metadata entry
             </summary>
             <param name="value"></param>
         </member>

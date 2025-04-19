@@ -37,14 +37,14 @@ namespace Blayms.PNGS.Unity.Editor
         public override void OnPreviewSettings()
         {
             EditorGUILayout.BeginHorizontal();
-            float newPreviewPlaybackSpeed = GUILayout.HorizontalSlider(previewPlaybackSpeed, 0f, 100f, GUILayout.Width(100));
+            float newPreviewPlaybackSpeed = GUILayout.HorizontalSlider(previewPlaybackSpeed, -100f, 100f, GUILayout.Width(150));
 
             if (!Mathf.Approximately(newPreviewPlaybackSpeed, previewPlaybackSpeed))
             {
                 previewPlaybackSpeed = Event.current.shift ? Mathf.Round(newPreviewPlaybackSpeed) : newPreviewPlaybackSpeed;
             }
 
-            GUILayout.Label(previewPlaybackSpeed < 100 ? $"{previewPlaybackSpeed:F2}%" : "100,0%", EditorStyles.boldLabel, GUILayout.Width(50));
+            GUILayout.Label(System.Math.Abs(previewPlaybackSpeed) < 100 ? $"{previewPlaybackSpeed:F2}%" : (previewPlaybackSpeed < 0 ? "-100,0%" : "100,0%" ), EditorStyles.boldLabel, GUILayout.Width(50));
             EditorGUILayout.EndHorizontal();
         }
         public override void DrawPreview(Rect previewArea)

@@ -5,10 +5,10 @@ namespace Blayms.PNGS.Unity
 {
     public class PngSequencePlayerBase<TTarget, TSource> : MonoBehaviour where TTarget : UnityEngine.Object where TSource : UnityEngine.Object
     {
-        [SerializeField] private PngSequenceFileUnity<TSource> m_Clip;
+        public PngSequenceFileUnity<TSource> clip;
         public BootMode bootMode = BootMode.None;
         public UpdateMode updateMode = UpdateMode.Scaled;
-        [SerializeField][Range(0f, 100f)] private float m_PlaybackSpeed = 1;
+        [SerializeField][Range(-500f, 500f)] private float m_PlaybackSpeed = 1;
         public TTarget target;
         [Space(10)] public bool overrideLoopCount;
         [SerializeField][Min(-1)] private int m_OverrideValue = -1;
@@ -26,6 +26,10 @@ namespace Blayms.PNGS.Unity
         public bool isPlaying => i_PlaybackJob.isActive && !i_PlaybackJob.isPaused && clip != null;
         public bool isPaused => i_PlaybackJob.isPaused;
         public int loopAmount => i_PlaybackJob.loopAmount;
+        /// <summary>
+        /// Playback position in milliseconds
+        /// </summary>
+        [property: SerializeField]
         public int playbackPositionMs
         {
             get
@@ -41,6 +45,10 @@ namespace Blayms.PNGS.Unity
                 i_PlaybackJob.currentPositionMS = value;
             }
         }
+        /// <summary>
+        /// Playback position in seconds
+        /// </summary>
+        [property: SerializeField]
         public float playbackPositionSeconds
         {
             get
@@ -56,24 +64,27 @@ namespace Blayms.PNGS.Unity
                 i_PlaybackJob.currentPositionMS = (int)(value * 1000);
             }
         }
-        public PngSequenceFileUnity<TSource> clip
-        {
-            get => m_Clip;
-            set
-            {
-                m_Clip = value;
-            }
-        }
+        /// <summary>
+        /// Speed of the playback
+        /// </summary>
+        [property: SerializeField]
         public float playbackSpeed
         {
             get => m_PlaybackSpeed;
             set
             {
-                m_PlaybackSpeed = Mathf.Clamp(value, 0f, 100f);
+                m_PlaybackSpeed = Mathf.Clamp(value, -500f, 500f);
             }
         }
+        /// <summary>
+        /// Current sequence element index
+        /// </summary>
         public int focusedElement => i_PlaybackJob.currentSequenceIndex;
-        public int OverrideLoopCountValue
+        /// <summary>
+        /// Overrides the loop count. To apply process of overriding the loop count, see <see cref="overrideLoopCount"/>
+        /// </summary>
+        [property: SerializeField]
+        public int overrideLoopCountValue
         {
             get => m_OverrideValue;
             set
@@ -99,39 +110,75 @@ namespace Blayms.PNGS.Unity
                 Play();
             }
         }
-        public void ResetPlayback(bool resetLoopCount)
+        /// <summary>
+        /// Reverses playback by flipping it's speed value sign
+        /// </summary>
+        public void ReversePlayback(bool value)
         {
-            i_PlaybackJob.currentPositionMS = 0;
-            i_PlaybackJob.currentSequenceIndex = 0;
+            float abs = Mathf.Abs(playbackSpeed);
+            playbackSpeed = value ? -abs : abs;
+        }
+        /// <summary>
+        /// Reverses playback by flipping it's speed value sign
+        /// </summary>
+        public void ReversePlayback()
+        {
+            playbackSpeed = -playbackSpeed;
+        }
+        /// <summary>
+        /// Resets the playback to either start or end
+        /// </summary>
+        public void ResetPlayback(bool resetLoopCount, bool tryStartingFromEnd)
+        {
+            if (!tryStartingFromEnd)
+            {
+                i_PlaybackJob.currentPositionMS = 0;
+                i_PlaybackJob.currentSequenceIndex = 0;
+            }
+            else
+            {
+                i_PlaybackJob.currentPositionMS = (int)clip.totalLength;
+                i_PlaybackJob.currentSequenceIndex = clip.sequenceElements.Length - 1;
+            }
             if (resetLoopCount)
             {
                 i_PlaybackJob.loopAmount = 0;
             }
         }
+        /// <summary>
+        /// Initiatiates the playback from the begining
+        /// </summary>
         public void Play(PngSequenceFileUnity<TSource> clip = null)
         {
             if (clip != null)
             {
-                m_Clip = clip;
+                this.clip = clip;
             }
-            if (m_Clip == null)
+            if (this.clip == null)
             {
                 Debug.LogWarning("The clip is null, can't play the sequence!");
                 return;
             }
+            ResetPlayback(false, playbackSpeed < 0);
             i_PlaybackJob.isActive = true;
             i_PlaybackJob.isPaused = false;
-            onStarted?.Invoke(m_Clip);
+            onStarted?.Invoke(clip);
         }
+        /// <summary>
+        /// Stops the playback
+        /// </summary>
         public void Stop()
         {
-            ResetPlayback(true);
+            ResetPlayback(true, false);
             onStoppedManually?.Invoke(clip);
             i_PlaybackJob.isActive = false;
         }
+        /// <summary>
+        /// Pauses / unpauses the playback
+        /// </summary>
         public void Pause(bool value)
         {
-            (value ? onPaused : onUnpaused)?.Invoke(m_Clip);
+            (value ? onPaused : onUnpaused)?.Invoke(clip);
             i_PlaybackJob.isPaused = value;
         }
         private int ActualMaxLoopCount()
@@ -152,19 +199,20 @@ namespace Blayms.PNGS.Unity
                 }
             }
         }
-        private void Update()
+        /// <summary>
+        /// Advances the playback by milliseconds. Negative argument can be used to wind back
+        /// </summary>
+        public void Advance(int milliseconds)
         {
-            if (isPlaying)
+            if (playbackSpeed != 0) // If playback speed is 0, calculation is useless, so we need to prevent it!
             {
-                float deltaTime = updateMode == UpdateMode.Scaled ? Time.deltaTime : Time.unscaledDeltaTime;
-                int millisecondsToAdd = Mathf.RoundToInt(deltaTime * 1000 * m_PlaybackSpeed);
-                i_PlaybackJob.currentPositionMS += millisecondsToAdd;
+                i_PlaybackJob.currentPositionMS += milliseconds;
                 uint totalLength = clip.totalLength;
-                if (i_PlaybackJob.currentPositionMS > totalLength)
+                if (i_PlaybackJob.currentPositionMS > totalLength || i_PlaybackJob.currentPositionMS < 0)
                 {
                     i_PlaybackJob.loopAmount++;
-                    ResetPlayback(false);
-                    onLoopPointReached?.Invoke(m_Clip);
+                    ResetPlayback(false, i_PlaybackJob.currentPositionMS < 0);
+                    onLoopPointReached?.Invoke(clip);
                 }
                 int actualMaxLoopCount = ActualMaxLoopCount();
                 if (actualMaxLoopCount > -1)
@@ -181,7 +229,16 @@ namespace Blayms.PNGS.Unity
                 i_PlaybackJob.currentSequenceIndex = newIndex;
                 PerformFrame();
 
-                onNewFrame?.Invoke(m_Clip);
+                onNewFrame?.Invoke(clip);
+            }
+        }
+        private void Update()
+        {
+            if (isPlaying)
+            {
+                float deltaTime = updateMode == UpdateMode.Scaled ? Time.deltaTime : Time.unscaledDeltaTime;
+                int millisecondsToAdd = Mathf.RoundToInt(deltaTime * 1000 * m_PlaybackSpeed);
+                Advance(millisecondsToAdd);
             }
         }
         protected virtual void PerformFrame()

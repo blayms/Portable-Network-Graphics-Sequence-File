@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Blayms.PNGS.Unity
 {
+    [AddComponentMenu("Feugravite/PNG Sequence Basic Player")]
     public sealed class PngSequenceBasicPlayer : PngSequencePlayerBase<RenderTexture, Texture2D>
     {
         protected override void PerformFrame()
