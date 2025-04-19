@@ -1,6 +1,6 @@
 ﻿namespace Blayms.PNGS.Constructor.Commands
 {
-    internal class HelpCommand : CommandBase
+    public class HelpCommand : CommandBase
     {
         public override string Name => "help";
         public override string Description => "Describes all commands available in PNGS Constructor!";

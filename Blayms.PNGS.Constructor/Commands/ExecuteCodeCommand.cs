@@ -1,6 +1,6 @@
 ﻿namespace Blayms.PNGS.Constructor.Commands
 {
-    internal class ExecuteCodeCommand : CommandBase
+    public class ExecuteCodeCommand : CommandBase
     {
         public override string Name => "exec";
         public override string Description => "Executes code straight from file contents";

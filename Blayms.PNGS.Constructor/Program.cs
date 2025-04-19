@@ -6,6 +6,8 @@ ConsoleEx.WriteSignature();
 // Link commands
 
 Assembly assembly = Assembly.GetExecutingAssembly();
+var dummy = assembly.DefinedTypes.ToArray();
+
 
 IEnumerator<Type> commandTypes = assembly.GetTypes().Where(x => (x.Namespace != null
 && x.Namespace.EndsWith("Constructor.Commands"))

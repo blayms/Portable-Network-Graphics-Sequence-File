@@ -1,6 +1,6 @@
 ﻿namespace Blayms.PNGS.Constructor.Commands
 {
-    internal class DeclareCustomVariableCommand : CommandBase
+    public class DeclareCustomVariableCommand : CommandBase
     {
         public override string Name => "declvar";
         public override string Description => "Declare, set or delete a custom string variable";

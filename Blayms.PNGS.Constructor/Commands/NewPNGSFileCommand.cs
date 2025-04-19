@@ -7,7 +7,7 @@ using System.Runtime.Intrinsics.X86;
 
 namespace Blayms.PNGS.Constructor.Commands
 {
-    internal class NewPNGSFileCommand : CommandBlockBase
+    public class NewPNGSFileCommand : CommandBlockBase
     {
         public override string Name => "newpngs";
         public override string Description => "Command block that creates a *.pngs file!";

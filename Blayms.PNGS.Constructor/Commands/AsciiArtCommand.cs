@@ -5,7 +5,7 @@
         public override string Name => "asciiart";
         public override string Description => "Show some fun ascii art!";
         public override CommandHideFlags HideFlags => CommandHideFlags.HideFromHelp;
-
+        public AsciiArtCommand() { }
         protected override void OnRegistered()
         {
             ArgumentInfo = new

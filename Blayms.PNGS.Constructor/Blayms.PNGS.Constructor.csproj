@@ -5,18 +5,13 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <RuntimeIdentifiers>win-x64;linux-x64;osx-x64</RuntimeIdentifiers>
+    <IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
     <PublishSingleFile>true</PublishSingleFile>
     <PublishTrimmed>true</PublishTrimmed>
     <SelfContained>true</SelfContained>
+    <TrimMode>partial</TrimMode>
+    <SuppressTrimAnalysisWarnings>false</SuppressTrimAnalysisWarnings>
     <Nullable>enable</Nullable>
-
-    <!-- Windows-specific icon configuration -->
-    <ApplicationIcon>Resources\PNGSCTOR.ico</ApplicationIcon>
-    <Win32Resource>Resources\PNGSCTOR.ico</Win32Resource>
-
-    <!-- macOS-specific icon configuration -->
-    <MacOSIcon Condition="'$(RuntimeIdentifier)' == 'osx-x64'">Resources\PNGSCTOR.icns</MacOSIcon>
-    <EnableMacOSCodeSign Condition="'$(RuntimeIdentifier)' == 'osx-x64'">true</EnableMacOSCodeSign>
 
   </PropertyGroup>
 

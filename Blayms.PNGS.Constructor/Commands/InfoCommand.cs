@@ -1,6 +1,6 @@
 ﻿namespace Blayms.PNGS.Constructor.Commands
 {
-    internal class InfoCommand : CommandBase
+    public class InfoCommand : CommandBase
     {
         public override string Name => "info";
         public override string Description => "Prints information about this tool!";

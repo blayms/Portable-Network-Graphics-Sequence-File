@@ -1,6 +1,6 @@
 ﻿namespace Blayms.PNGS.Constructor.Commands
 {
-    internal class SleepCommand : CommandBase
+    public class SleepCommand : CommandBase
     {
         public override string Name => "sleep";
         public override string Description => "Pauses a main thread for specified amount of milliseconds";

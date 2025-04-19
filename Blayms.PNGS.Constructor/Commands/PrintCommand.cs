@@ -1,6 +1,6 @@
 ﻿namespace Blayms.PNGS.Constructor.Commands
 {
-    internal class PrintCommand : CommandBase
+    public class PrintCommand : CommandBase
     {
         public override string Name => "print";
         public override string Description => "Prints a string value to console!";
