@@ -1,19 +1,29 @@
-# Portable Network Graphics Sequence File
+# Portable Network Graphics Sequence Unity Engine Package
+### An official Unity Engine support for PNGS file format made by the developer (Blayms)!
+> [More about Portable Network Graphics Sequence here](https://github.com/blayms/Portable-Network-Graphics-Sequence-File)
 
-This is a relatively simple file format I created in one day. It's structured similarly to *.gif files. The format was inspired by my old Baldi's Basics Plus mod codenamed "MLMBC" (Monday Left Me Broken Cat). This mod replaced all tile textures with MP4 files to animate the tiles.
+In short, PNGS files behave similarly to *.gif, but heavily rely on *.png pixel data instead, which allows solid transparency support straight out of the box! — *.apng analog made by Blayms.
 
-Since Unity Engine doesn't support crisp, lossless compression for video files of any format and doesn't support GIFs either, I decided to create my own file format that stores a collection of *.png color bytes along with the duration of each "sequence."
+## Unity Package Features
 
-## Fun Fact
-Because this is a collection of PNG images, I named it "**Portable Network Graphics Sequence**" (*.pngs).
-***.pngs (PNGs)** - can also serve as the plural form for PNG files!
+- **Native object wrapper specifically designed for Unity Engine**
+Obviously, to add support for these files, the wrappers had to be included, which extend and express the possibilities of that file format.
+  - **Custom asset importer**
+    - PngSequenceTextureFileUnity - can be imported if no metadata that defines Unity type was found in a file
+    - PngSequenceSpriteFileUnity - can be imported only if metadata `unityType=sprite` was detected
+  - **Custom inspectors**
+    - PNGS asset inspector also contains a preview window with a little player
+  - **Custom icons**
+    - Made by Blayms 
+- **A RenderTexture player (PngSequenceBasicPlayer)**
+Plays *.pngs files straight up on a RenderTexture, which can be used on things like UI or Materials (e.g., for meshes)
 
-## Unity Package
+- **A SpriteRenderer player (PngSequenceSpritePlayer)**
+Plays *.pngs files straight up on a SpriteRenderer, which can be used in 2D or even 2.5D games
 
-> Currently, the Unity Engine package is not finished, unstable. I do not recommend to use it
-
+## How to Install
 The only way to install a Unity Engine package is through Git and UPM (Unity Package Manager)
-This method requires Git to be installed on your machine!
+This method requires [Git](https://git-scm.com/downloads) to be installed on your machine!
 
 1. Open Unity Package Manager inside the engine
 2. Click on a "+" icon that is near a thing labeled "Sort Names (asc)"
@@ -21,8 +31,3 @@ This method requires Git to be installed on your machine!
 4. Paste this link
 `https://github.com/blayms/Portable-Network-Graphics-Sequence-File.git?path=/com.feugravite.pngsunity`
 5. You're good to go!
-
-## Structure
-![](https://file.garden/Z-1IetWhPAglb4Fv/pngsgithub.svg)
-## Special Thanks
-- [l4net by Krashan on NuGet](https://www.nuget.org/packages/lz4net/)
