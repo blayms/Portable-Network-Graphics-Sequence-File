@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blayms.PNGS", "PngSequenceF
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blayms.PNGS.Test", "PngSequenceFile.Test\Blayms.PNGS.Test.csproj", "{036D1F57-45B7-46CF-B335-DEEB329929C9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blayms.PNGS.Constructor", "Blayms.PNGS.Constructor\Blayms.PNGS.Constructor.csproj", "{C3F7D0C2-D0C1-48A6-A3AE-A3FDBB07AC42}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{036D1F57-45B7-46CF-B335-DEEB329929C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{036D1F57-45B7-46CF-B335-DEEB329929C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{036D1F57-45B7-46CF-B335-DEEB329929C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3F7D0C2-D0C1-48A6-A3AE-A3FDBB07AC42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3F7D0C2-D0C1-48A6-A3AE-A3FDBB07AC42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3F7D0C2-D0C1-48A6-A3AE-A3FDBB07AC42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3F7D0C2-D0C1-48A6-A3AE-A3FDBB07AC42}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

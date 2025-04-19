@@ -17,3 +17,4 @@ using System.Runtime.InteropServices;
 
 [assembly: Guid("6c90bc07-a4d5-4118-943a-efbe163e6e92")]
 [assembly: InternalsVisibleTo("Blayms.PNGS.Test")]
+[assembly: InternalsVisibleTo("Blayms.PNGS.Constructor")]

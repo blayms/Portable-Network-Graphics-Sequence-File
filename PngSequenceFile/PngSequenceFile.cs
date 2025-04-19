@@ -66,9 +66,9 @@ namespace Blayms.PNGS
 
                     Header.Version = binaryReader.ReadSingle();
 
-                    uint width = PngParser.ReadBigEndianUInt32(binaryReader);
-                    uint height = PngParser.ReadBigEndianUInt32(binaryReader);
-                    int loopCount = PngParser.ReadBigEndianInt32(binaryReader);
+                    uint width = InternalHelper.ReadBigEndianUInt32(binaryReader);
+                    uint height = InternalHelper.ReadBigEndianUInt32(binaryReader);
+                    int loopCount = InternalHelper.ReadBigEndianInt32(binaryReader);
                     byte bitDepth = binaryReader.ReadByte();
                     PngColorType colorType = (PngColorType)binaryReader.ReadByte();
                     PngCompressionMethod compressionMethod = (PngCompressionMethod)binaryReader.ReadByte();
@@ -182,7 +182,24 @@ namespace Blayms.PNGS
             if (!Sequences.Contains(sequence))
             {
                 Sequences.Add(sequence);
+                sequence.File = this;
             }
+        }
+        /// <summary>
+        /// Adds a <see cref="SequenceElement"/> to the file
+        /// </summary>
+        public void SwapSequenceElements(int indexA, int indexB)
+        {
+            bool isIndexAValid = indexA >= 0 && indexA < Sequences.Count;
+            bool isIndexBValid = indexB >= 0 && indexB < Sequences.Count;
+
+            if (!isIndexAValid || !isIndexBValid)
+                return;
+
+            if (indexA == indexB)
+                return;
+
+            Sequences.Swap(indexB, indexA);
         }
         /// <summary>
         /// Insert a <see cref="SequenceElement"/> to the file
@@ -316,10 +333,17 @@ namespace Blayms.PNGS
             /// </summary>
             public void RemoveMetadataAt(int index)
             {
-                if (metadata.Count >= index)
+                if (metadata.Count >= index && index > -1)
                 {
                     metadata.RemoveAt(index);
                 }
+            }
+            /// <summary>
+            /// Checks if the index is in metadata range
+            /// </summary>
+            public bool IsValidMetadataIndex(int index)
+            {
+                return metadata.Count >= index && index > -1;
             }
             /// <summary>
             /// Adds specified metadata entry
@@ -348,6 +372,14 @@ namespace Blayms.PNGS
                 {
                     metadata.Remove(value);
                 }
+            }
+            /// <summary>
+            /// Contains specified metadata entry
+            /// </summary>
+            /// <param name="value"></param>
+            public bool ContainsMetadata(string value)
+            {
+                return metadata.Contains(value);
             }
             /// <summary>
             /// Returns a metadata entry at specified index
@@ -379,16 +411,19 @@ namespace Blayms.PNGS
             internal void Refresh(bool preferMaximized)
             {
                 IHDRHeader[] ihdrHeaders = File.Sequences.Select(x => x.ihdrChunk).ToArray();
-                IHDR = new IHDRHeader
-                (
-                    width: preferMaximized ? ihdrHeaders.Max(x => x.Width) : ihdrHeaders.Min(x => x.Width),
-                    height: preferMaximized ? ihdrHeaders.Max(x => x.Height) : ihdrHeaders.Min(x => x.Height),
-                    bitDepth: preferMaximized ? ihdrHeaders.Max(x => x.BitDepth) : ihdrHeaders.Min(x => x.BitDepth),
-                    colorType: preferMaximized ? ihdrHeaders.Max(x => x.ColorType) : ihdrHeaders.Min(x => x.ColorType),
-                    compressionMethod: preferMaximized ? ihdrHeaders.Max(x => x.CompressionMethod) : ihdrHeaders.Min(x => x.CompressionMethod),
-                    filterMethod: preferMaximized ? ihdrHeaders.Max(x => x.FilterMethod) : ihdrHeaders.Min(x => x.FilterMethod),
-                    interlaceMethod: preferMaximized ? ihdrHeaders.Max(x => x.InterlaceMethod) : ihdrHeaders.Min(x => x.InterlaceMethod)
-                );
+                if (ihdrHeaders.Any())
+                {
+                    IHDR = new IHDRHeader
+                    (
+                        width: preferMaximized ? ihdrHeaders.Max(x => x.Width) : ihdrHeaders.Min(x => x.Width),
+                        height: preferMaximized ? ihdrHeaders.Max(x => x.Height) : ihdrHeaders.Min(x => x.Height),
+                        bitDepth: preferMaximized ? ihdrHeaders.Max(x => x.BitDepth) : ihdrHeaders.Min(x => x.BitDepth),
+                        colorType: preferMaximized ? ihdrHeaders.Max(x => x.ColorType) : ihdrHeaders.Min(x => x.ColorType),
+                        compressionMethod: preferMaximized ? ihdrHeaders.Max(x => x.CompressionMethod) : ihdrHeaders.Min(x => x.CompressionMethod),
+                        filterMethod: preferMaximized ? ihdrHeaders.Max(x => x.FilterMethod) : ihdrHeaders.Min(x => x.FilterMethod),
+                        interlaceMethod: preferMaximized ? ihdrHeaders.Max(x => x.InterlaceMethod) : ihdrHeaders.Min(x => x.InterlaceMethod)
+                    );
+                }
             }
         }
         /// <summary>
@@ -423,6 +458,7 @@ namespace Blayms.PNGS
             public byte[] EncodeToPNG()
             {
                 return PngParser.Write(File.Header.IHDR, Pixels);
+                //return PngParser.Write(File.Header.IHDR, Pixels);
             }
             /// <summary>
             /// Creates an instance of <see cref="SequenceElement"/> from *.png file path duration in milliseconds (ms)
@@ -448,9 +484,10 @@ namespace Blayms.PNGS
             /// </summary>
             public void SwapPng(byte[] pngData)
             {
-                (IHDRHeader, byte[]) png = PngParser.Read(pngData);
-                ihdrChunk = png.Item1;
-                Pixels = png.Item2;
+                (IHDRHeader ihdr, byte[] bytes) png = PngParser.ToTruecolorAlphaChunked(pngData);
+                //(IHDRHeader, byte[]) png = PngParser.Read(pngData);
+                ihdrChunk = png.ihdr;
+                Pixels = png.bytes;
             }
             /// <summary>
             /// Changes the image data of this sequence element from file path
