@@ -1,27 +1,28 @@
-# Feugravite Input
+# Portable Network Graphics Sequence File
 
-Feugravite Input is a powerful and highly flexible input handling system built on top of Unity's **New Input System**. This package provides a complex collection of features, offering enhanced capabilities beyond Unity's default input handling. It is designed to support **modifiers, composites, and control types**, making it suitable for advanced input management in Unity projects.
+This is a relatively simple file format I created in one day. It's structured similarly to *.gif files. The format was inspired by my old Baldi's Basics Plus mod codenamed "MLMBC" (Monday Left Me Broken Cat). This mod replaced all tile textures with MP4 files to animate the tiles.
 
-## Features
+Since Unity Engine doesn't support crisp, lossless compression for video files of any format and doesn't support GIFs either, I decided to create my own file format that stores a collection of *.png color bytes along with the duration of each "sequence."
 
-- **Modifiers & Composites** – Supports advanced input customization, allowing complex interactions.
-- **Control Type Handling** – Provides robust handling of various control schemes and devices.
-- **Highly Configurable** – Designed for flexibility to fit diverse game mechanics and input scenarios.
-- **Built-in Control Mapper** – Includes a fully functional and customizable Control Mapper, allowing players to remap controls as needed.
-- **Built on Unity's New Input System** – Leverages the modern Unity Input System for improved performance and extensibility.
+## Fun Fact
+Because this is a collection of PNG images, I named it "**Portable Network Graphics Sequence**" (*.pngs).
+***.pngs (PNGs)** - can also serve as the plural form for PNG files!
 
-## Installation
+## Unity Package
 
-To use Feugravite Input as a local package in Unity:
+> Currently, the Unity Engine package is not finished, unstable. I do not recommend to use it
 
-1. Open Unity and navigate to **Window > Package Manager**.
-2. Click the **+** button and select **Add package from disk...**.
-3. Locate the `package.json` file inside the Feugravite Input folder and select it.
+The only way to install a Unity Engine package is through Git and UPM (Unity Package Manager)
+This method requires Git to be installed on your machine!
 
-## Usage
+1. Open Unity Package Manager inside the engine
+2. Click on a "+" icon that is near a thing labeled "Sort Names (asc)"
+3. Select "Install package from a git URL..."
+4. Paste this link
+`https://github.com/blayms/Portable-Network-Graphics-Sequence-File.git?path=/com.feugravite.pngsunity`
+5. You're good to go!
 
-Feugravite Input is designed to work seamlessly with Unity's Input System. Ensure that the **Input System Package** is installed in your project. You can then integrate Feugravite Input by setting up input actions, applying modifiers, and handling input through its flexible API.
-
-## License
-
-MIT. This package is provided as-is. You are free to modify and integrate it into your projects.
+## Structure
+![](https://file.garden/Z-1IetWhPAglb4Fv/pngsgithub.svg)
+## Special Thanks
+- [l4net by Krashan on NuGet](https://www.nuget.org/packages/lz4net/)
